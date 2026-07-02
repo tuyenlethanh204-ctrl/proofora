@@ -1,0 +1,14 @@
+<svg width="720" height="160" viewBox="0 0 720 160" fill="none" xmlns="http://www.w3.org/2000/svg" role="img" aria-labelledby="title desc">
+  <title id="title">zkAggregator logo</title>
+  <desc id="desc">zkAggregator wordmark with layered zero-knowledge batch symbol</desc>
+  <rect width="720" height="160" rx="18" fill="#0F0F0F"/>
+  <g transform="translate(24 24)">
+    <rect x="0.75" y="0.75" width="110.5" height="110.5" rx="13.25" stroke="#25D0AB" stroke-opacity="0.52" stroke-width="1.5"/>
+    <path d="M56 17L87 33.5L56 50L25 33.5L56 17Z" stroke="#25D0AB" stroke-width="6" stroke-linejoin="round"/>
+    <path d="M26 49L56 65L86 49" stroke="#EDEDED" stroke-width="6" stroke-linecap="square" stroke-linejoin="round"/>
+    <path d="M26 67L56 83L86 67" stroke="#25D0AB" stroke-width="6" stroke-linecap="square" stroke-linejoin="round"/>
+    <path d="M40 33.5H72L40 67H72" stroke="#8BF5DE" stroke-width="5" stroke-linecap="square" stroke-linejoin="round"/>
+  </g>
+  <text x="160" y="75" fill="#EDEDED" font-family="TASA Orbiter Display, Inter, Arial, sans-serif" font-size="44" font-weight="700" letter-spacing="-1.6">zkAggregator</text>
+  <text x="162" y="108" fill="#25D0AB" font-family="NB Architekt, JetBrains Mono, monospace" font-size="16" font-weight="400" letter-spacing="3.2">BATCH VERIFICATION FALLBACK</text>
+</svg>

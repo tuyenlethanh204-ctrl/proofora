@@ -1,0 +1,13 @@
+node_modules/
+target/
+contracts/target/
+frontend/node_modules/
+frontend/.vercel/
+frontend/.env*
+demo-video/
+*.webm
+*.wav
+*.mp4
+thumb_*.png
+*.log
+.DS_Store

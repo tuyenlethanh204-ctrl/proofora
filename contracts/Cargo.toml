@@ -1,0 +1,9 @@
+[workspace]
+members = ["batch_verifier"]
+resolver = "2"
+
+[workspace.dependencies]
+soroban-sdk = "26.1.0"
+
+[profile.release]
+overflow-checks = true

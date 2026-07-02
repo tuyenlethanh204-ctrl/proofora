@@ -1,0 +1,33 @@
+{
+  "mode": "batch verification fallback",
+  "note": "This benchmark measures local fallback verification and transaction-count reduction, not recursive proof compression.",
+  "rows": [
+    {
+      "n": 2,
+      "individualTxCount": 2,
+      "batchTxCount": 1,
+      "txReduction": "2x",
+      "individualVerifyMs": 0.018,
+      "batchVerifyMs": 0.018,
+      "root": "b66d8fe1bf61fb71351d5a6cc999cec6f4acd171b507a5d887eab9994e551304"
+    },
+    {
+      "n": 4,
+      "individualTxCount": 4,
+      "batchTxCount": 1,
+      "txReduction": "4x",
+      "individualVerifyMs": 0.0133,
+      "batchVerifyMs": 0.0232,
+      "root": "9c4c86d0fabd56cfaa9199259e9c7466914946f6af2ff0baa47e59c09193ac7d"
+    },
+    {
+      "n": 8,
+      "individualTxCount": 8,
+      "batchTxCount": 1,
+      "txReduction": "8x",
+      "individualVerifyMs": 0.0299,
+      "batchVerifyMs": 0.03,
+      "root": "a573be8162ca41070109e0b2a3b9d03d629e902925eacd7772eb40d2a3683200"
+    }
+  ]
+}

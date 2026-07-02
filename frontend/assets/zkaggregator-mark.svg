@@ -1,0 +1,10 @@
+<svg width="128" height="128" viewBox="0 0 128 128" fill="none" xmlns="http://www.w3.org/2000/svg" role="img" aria-labelledby="title desc">
+  <title id="title">zkAggregator mark</title>
+  <desc id="desc">Layered zero-knowledge batch mark for zkAggregator</desc>
+  <rect x="8" y="8" width="112" height="112" rx="14" fill="#0F0F0F"/>
+  <rect x="8.75" y="8.75" width="110.5" height="110.5" rx="13.25" stroke="#25D0AB" stroke-opacity="0.52" stroke-width="1.5"/>
+  <path d="M64 25L95 41.5L64 58L33 41.5L64 25Z" stroke="#25D0AB" stroke-width="6" stroke-linejoin="round"/>
+  <path d="M34 57L64 73L94 57" stroke="#EDEDED" stroke-width="6" stroke-linecap="square" stroke-linejoin="round"/>
+  <path d="M34 75L64 91L94 75" stroke="#25D0AB" stroke-width="6" stroke-linecap="square" stroke-linejoin="round"/>
+  <path d="M48 41.5H80L48 75H80" stroke="#8BF5DE" stroke-width="5" stroke-linecap="square" stroke-linejoin="round"/>
+</svg>

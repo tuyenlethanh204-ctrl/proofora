@@ -1,0 +1,9 @@
+{
+  "type": "module",
+  "scripts": {
+    "test": "node --test scripts/*.test.mjs",
+    "bench": "node scripts/bench.mjs",
+    "web:build": "node web/build.mjs",
+    "demo": "npx serve frontend"
+  }
+}

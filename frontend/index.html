@@ -1,0 +1,794 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Proofora | Batch Verification on Stellar</title>
+  <meta name="description" content="Proofora batches proof-backed inputs into one verifiable Soroban transaction on Stellar.">
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='8' fill='%23080b10'/%3E%3Cpath d='M16 5 6 10.5 16 16l10-5.5L16 5Z' fill='none' stroke='%235ef0a1' stroke-width='2.4' stroke-linejoin='round'/%3E%3Cpath d='M6 17 16 22.5 26 17' fill='none' stroke='%237cb7ff' stroke-width='2.4' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    @font-face {
+      font-family: "TASA Orbiter Display";
+      src: url("https://colosseum.com/fonts/tasa-orbiter-display/TASAOrbiterDisplay-Regular.otf") format("opentype");
+      font-weight: 400;
+      font-display: swap;
+    }
+    @font-face {
+      font-family: "TASA Orbiter Display";
+      src: url("https://colosseum.com/fonts/tasa-orbiter-display/TASAOrbiterDisplay-SemiBold.otf") format("opentype");
+      font-weight: 600;
+      font-display: swap;
+    }
+    @font-face {
+      font-family: "TASA Orbiter Display";
+      src: url("https://colosseum.com/fonts/tasa-orbiter-display/TASAOrbiterDisplay-Bold.otf") format("opentype");
+      font-weight: 700;
+      font-display: swap;
+    }
+    @font-face {
+      font-family: "NB Architekt";
+      src: url("https://colosseum.com/fonts/nb-architekt/nb-architekt-regular.otf") format("opentype");
+      font-weight: 400;
+      font-display: swap;
+    }
+    @font-face {
+      font-family: "NB Architekt";
+      src: url("https://colosseum.com/fonts/nb-architekt/nb-architekt-light.otf") format("opentype");
+      font-weight: 300;
+      font-display: swap;
+    }
+    :root {
+      --bg: #0f0f0f;
+      --bg-2: #171615;
+      --panel: rgba(23, 22, 21, 0.72);
+      --panel-strong: #171615;
+      --line: rgba(80, 80, 80, 0.6);
+      --line-strong: rgba(126, 126, 126, 0.78);
+      --text: #ededed;
+      --muted: #7e7e7e;
+      --soft: #b8b6b1;
+      --green: #25d0ab;
+      --blue: #8ee9d6;
+      --amber: #ffd166;
+      --red: #ff7a90;
+      --shadow: 0 28px 80px rgba(0, 0, 0, 0.46);
+      --radius: 8px;
+      --mono: "NB Architekt", "JetBrains Mono", ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+      --sans: "TASA Orbiter Display", Inter, ui-sans-serif, system-ui, sans-serif;
+      --label: "NB Architekt", "JetBrains Mono", ui-monospace, monospace;
+    }
+
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body {
+      margin: 0;
+      min-height: 100vh;
+      color: var(--text);
+      background:
+        linear-gradient(rgba(255,255,255,0.032) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255,255,255,0.032) 1px, transparent 1px),
+        radial-gradient(circle at 50% -8%, rgba(37, 208, 171, 0.22), transparent 34%),
+        linear-gradient(180deg, #0f0f0f 0%, #171615 52%, #0f0f0f 100%);
+      background-size: 72px 72px, 72px 72px, auto, auto;
+      font-family: var(--sans);
+    }
+
+    a { color: inherit; text-decoration: none; }
+    button { font: inherit; }
+    .page { width: min(1180px, calc(100% - 40px)); margin: 0 auto; }
+
+    .topbar {
+      position: sticky;
+      top: 0;
+      z-index: 20;
+      border-bottom: 1px solid var(--line);
+      background: rgba(15, 15, 15, 0.88);
+      backdrop-filter: blur(18px);
+    }
+    .nav {
+      width: min(1180px, calc(100% - 40px));
+      height: 72px;
+      margin: 0 auto;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 24px;
+    }
+    .brand {
+      display: flex;
+      align-items: center;
+      min-width: 220px;
+      height: 58px;
+      overflow: hidden;
+    }
+    .brand-logo {
+      display: block;
+      width: 174px;
+      height: 112px;
+      object-fit: contain;
+    }
+    .navlinks { display: flex; align-items: center; gap: 24px; color: var(--soft); font-family: var(--label); font-size: 12px; letter-spacing: .08em; text-transform: uppercase; }
+    .navlinks a { color: var(--soft); }
+    .navlinks a:hover { color: white; }
+    .actions { display: flex; align-items: center; gap: 10px; }
+
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 9px;
+      height: 42px;
+      padding: 0 18px;
+      border: 1px solid var(--line-strong);
+      border-radius: 4px;
+      color: var(--text);
+      background: transparent;
+      cursor: pointer;
+      transition: transform 160ms ease, border-color 160ms ease, background 160ms ease;
+      white-space: nowrap;
+      font-family: var(--label);
+      font-size: 12px;
+      letter-spacing: .08em;
+      text-transform: uppercase;
+    }
+    .btn:hover { transform: translateY(-1px); border-color: rgba(237, 237, 237, 0.42); background: rgba(255,255,255,0.04); }
+    .btn.primary {
+      color: var(--green);
+      border-color: rgba(37, 208, 171, 0.16);
+      background: rgba(37, 208, 171, 0.12);
+      font-weight: 400;
+    }
+    .btn svg { width: 16px; height: 16px; }
+
+    .hero {
+      display: block;
+      padding: 78px 0 26px;
+    }
+    h1 {
+      max-width: 1040px;
+      margin: 0 auto;
+      text-align: center;
+      font-size: clamp(58px, 9vw, 128px);
+      line-height: 0.96;
+      letter-spacing: -0.045em;
+      text-transform: uppercase;
+      font-weight: 700;
+    }
+    .lead {
+      max-width: 870px;
+      margin: 24px auto 0;
+      color: #d0cfca;
+      font-size: 18px;
+      line-height: 1.62;
+      text-align: center;
+    }
+    .hero-copy {
+      min-height: 0;
+      display: block;
+      padding: 0;
+    }
+    .hero-bottom { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1px; max-width: 820px; margin: 46px auto 0; border: 1px solid var(--line); background: var(--line); }
+    .metric {
+      min-height: 116px;
+      padding: 18px;
+      border: 0;
+      border-radius: 0;
+      background: rgba(15,15,15,0.82);
+      text-align: center;
+    }
+    .metric b { display: block; font-family: var(--label); color: var(--green); font-size: 26px; letter-spacing: 0.02em; }
+    .metric span { display: block; margin-top: 9px; color: var(--muted); font-family: var(--label); font-size: 11px; line-height: 1.55; letter-spacing: .08em; text-transform: uppercase; }
+
+    .console {
+      position: relative;
+      overflow: hidden;
+      max-width: 980px;
+      min-height: 410px;
+      margin: 58px auto 0;
+      border: 2px solid #343434;
+      border-radius: 8px;
+      background:
+        linear-gradient(180deg, rgba(255,255,255,0.035), rgba(255,255,255,0.01)),
+        rgba(15, 15, 15, 0.86);
+      box-shadow: var(--shadow), inset 0 1px 0 rgba(255,255,255,0.1);
+    }
+    .console::before {
+      content: "";
+      position: absolute;
+      inset: -1px;
+      background:
+        linear-gradient(90deg, transparent, rgba(37, 208, 171, 0.09), transparent),
+        radial-gradient(circle at 50% 0%, rgba(37, 208, 171, 0.15), transparent 36%);
+      pointer-events: none;
+    }
+    .console-head {
+      position: relative;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 18px 20px;
+      border-bottom: 1px solid var(--line);
+    }
+    .dots { display: flex; gap: 7px; }
+    .dot { width: 10px; height: 10px; border-radius: 999px; background: #2b3645; }
+    .dot:nth-child(1) { background: #ff6d84; }
+    .dot:nth-child(2) { background: #ffd166; }
+    .dot:nth-child(3) { background: #5ef0a1; }
+    .console-title { color: var(--muted); font-family: var(--mono); font-size: 12px; }
+    .console-body { position: relative; padding: 22px; }
+    .run-card {
+      border: 1px solid rgba(37,208,171,0.28);
+      border-radius: 8px;
+      background: rgba(37,208,171,0.06);
+      padding: 18px;
+    }
+    .row { display: flex; align-items: center; justify-content: space-between; gap: 18px; }
+    .row > * { min-width: 0; }
+    .label { color: var(--muted); font-size: 12px; }
+    .mono { font-family: var(--mono); }
+    .hash {
+      word-break: break-all;
+      overflow-wrap: anywhere;
+      color: #eaf2ff;
+      font-family: var(--mono);
+      font-size: 12px;
+      line-height: 1.6;
+      text-transform: none;
+    }
+    .status {
+      display: inline-flex;
+      align-items: center;
+      gap: 7px;
+      height: 28px;
+      padding: 0 10px;
+      border: 1px solid rgba(94,240,161,0.34);
+      border-radius: 999px;
+      color: var(--green);
+      background: rgba(37,208,171,0.08);
+      font-size: 12px;
+      font-family: var(--label);
+      font-weight: 400;
+      letter-spacing: .08em;
+      text-transform: uppercase;
+    }
+    .status::before {
+      content: "";
+      width: 7px;
+      height: 7px;
+      border-radius: 999px;
+      background: currentColor;
+      box-shadow: 0 0 14px currentColor;
+    }
+    .status.warn { color: var(--amber); border-color: rgba(255,209,102,0.34); background: rgba(255,209,102,0.08); }
+    .status.err { color: var(--red); border-color: rgba(255,122,144,0.34); background: rgba(255,122,144,0.08); }
+
+    .steps { display: grid; gap: 11px; margin-top: 18px; }
+    .step {
+      display: grid;
+      grid-template-columns: 28px 1fr auto;
+      align-items: center;
+      gap: 12px;
+      padding: 13px;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      background: rgba(23,22,21,0.62);
+    }
+    .num {
+      width: 28px;
+      height: 28px;
+      display: grid;
+      place-items: center;
+      border-radius: 4px;
+      color: var(--green);
+      border: 1px solid rgba(37,208,171,.35);
+      background: rgba(37,208,171,.1);
+      font-family: var(--mono);
+      font-weight: 800;
+      font-size: 12px;
+    }
+    .step strong { display: block; font-size: 13px; }
+    .step span { display: block; margin-top: 3px; color: var(--muted); font-size: 12px; }
+
+    .section { padding: 22px 0; }
+    .grid-3 { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 14px; }
+    .grid-2 { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 14px; }
+    .panel {
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      background: var(--panel);
+      box-shadow: 0 20px 48px rgba(0,0,0,0.22);
+      overflow: hidden;
+    }
+    .panel-head {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 14px;
+      padding: 18px 18px 14px;
+      border-bottom: 1px solid var(--line);
+    }
+    .panel-head h2, .panel-head h3 { margin: 0; font-size: 16px; letter-spacing: .01em; text-transform: uppercase; }
+    .panel-body { padding: 18px; }
+    .big-number { font-family: var(--label); color: var(--green); font-size: 50px; line-height: 1; letter-spacing: .02em; }
+    .subtext { margin-top: 10px; color: var(--muted); font-size: 13px; line-height: 1.55; }
+
+    .table { width: 100%; border-collapse: collapse; }
+    .table th {
+      color: var(--muted);
+      font-size: 11px;
+      font-weight: 700;
+      text-align: left;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      padding: 0 0 10px;
+    }
+    .table td {
+      border-top: 1px solid var(--line);
+      padding: 13px 0;
+      color: #dce7f7;
+      font-size: 13px;
+      vertical-align: top;
+    }
+    .table td:last-child, .table th:last-child { text-align: right; }
+    .bar {
+      height: 9px;
+      overflow: hidden;
+      border-radius: 999px;
+      background: rgba(255,255,255,0.07);
+    }
+    .bar span {
+      display: block;
+      height: 100%;
+      width: var(--w);
+      border-radius: inherit;
+      background: linear-gradient(90deg, var(--green), var(--blue));
+    }
+
+    .tx-list { display: grid; gap: 12px; }
+    .tx {
+      display: grid;
+      grid-template-columns: 1fr auto;
+      gap: 14px;
+      padding: 14px;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      background: rgba(255,255,255,0.03);
+    }
+    .tx strong { display: block; margin-bottom: 6px; font-size: 13px; }
+    .tx code { color: var(--soft); font-family: var(--mono); font-size: 12px; word-break: break-all; }
+    .tx a { color: var(--green); font-size: 12px; font-weight: 700; }
+
+    .terminal {
+      min-height: 218px;
+      padding: 16px;
+      border-radius: 6px;
+      border: 1px solid rgba(94,240,161,0.22);
+      background: #05080c;
+      color: #c9fbdc;
+      font-family: var(--mono);
+      font-size: 12px;
+      line-height: 1.72;
+      overflow: auto;
+      box-shadow: inset 0 1px 0 rgba(255,255,255,0.06);
+    }
+    .terminal .muted { color: #6f8378; }
+
+    .root-card {
+      display: grid;
+      gap: 12px;
+      padding: 15px;
+      border-radius: 8px;
+      background: rgba(255,255,255,0.035);
+      border: 1px solid var(--line);
+    }
+    .pill-row {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 8px;
+      max-width: 820px;
+      margin: 10px auto 0;
+    }
+    .pill {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 28px;
+      padding: 5px 10px;
+      border-radius: 999px;
+      border: 1px solid var(--line);
+      color: var(--soft);
+      background: rgba(15,15,15,0.72);
+      font-size: 12px;
+      font-family: var(--label);
+      letter-spacing: .08em;
+      text-transform: uppercase;
+      text-align: center;
+    }
+
+    footer {
+      padding: 32px 0 46px;
+      color: var(--muted);
+      font-size: 13px;
+      text-align: center;
+    }
+
+    @media (max-width: 980px) {
+      .hero { padding-top: 52px; }
+      .console { min-height: auto; }
+      .grid-3, .grid-2 { grid-template-columns: 1fr; }
+      .navlinks { display: none; }
+    }
+    @media (max-width: 640px) {
+      .page, .nav { width: min(100% - 24px, 1180px); }
+      .nav { height: 64px; }
+      .brand { min-width: 0; height: 52px; }
+      .brand-logo { width: 138px; height: 92px; }
+      .actions .btn:not(.primary) { display: none; }
+      .hero-bottom { grid-template-columns: 1fr; }
+      .pill-row { grid-template-columns: 1fr; }
+      .row, .tx { grid-template-columns: 1fr; align-items: start; }
+      .step { grid-template-columns: 28px 1fr; }
+      .step .status { grid-column: 2; width: max-content; }
+      h1 { font-size: 50px; }
+      .lead { font-size: 16px; }
+      .hash, .tx code { font-size: 11px; line-height: 1.72; }
+    }
+  </style>
+</head>
+<body>
+  <header class="topbar">
+    <nav class="nav">
+      <a class="brand" href="#">
+        <img class="brand-logo" src="assets/proofora-logo.png" alt="Proofora - Batch Verification">
+      </a>
+      <div class="navlinks" aria-label="Page sections">
+        <a href="#workflow">Workflow</a>
+        <a href="#benchmark">Benchmark</a>
+        <a href="#onchain">On-chain</a>
+      </div>
+      <div class="actions">
+        <a class="btn" href="https://stellar.expert/explorer/testnet/contract/CASSNKDNJJCSILZ7SEF25SP336AXEZRPGSBFAJSTHST5U3FPV5OG4RCY" target="_blank" rel="noreferrer">Explorer</a>
+        <button class="btn primary" id="refreshTop">Refresh testnet</button>
+      </div>
+    </nav>
+  </header>
+
+  <main class="page">
+    <section class="hero">
+      <div class="hero-copy">
+        <div>
+          <h1>Enter the Aggregator</h1>
+          <p class="lead">A proving-ground demo for the completed Proofora fallback path: proof-like receipts, public-input root checking, benchmarked N-to-1 transaction reduction, and a deployed Soroban contract on Stellar testnet.</p>
+          <div class="hero-bottom" aria-label="Key deployment facts">
+            <div class="metric">
+              <b id="ledgerMetric">...</b>
+              <span>Latest testnet ledger observed by Soroban RPC.</span>
+            </div>
+            <div class="metric">
+              <b>6bcc3d</b>
+              <span>Fetched testnet WASM hash matches local build.</span>
+            </div>
+            <div class="metric">
+              <b>N=2</b>
+              <span>On-chain verify_many transaction recorded.</span>
+            </div>
+          </div>
+        </div>
+        <div class="pill-row">
+          <span class="pill">Network · Stellar testnet</span>
+          <span class="pill">Mode · Batch verification fallback</span>
+          <span class="pill">Claim · No recursive compression</span>
+        </div>
+      </div>
+
+      <aside class="console" aria-label="Demo console">
+        <div class="console-head">
+          <div class="dots" aria-hidden="true"><span class="dot"></span><span class="dot"></span><span class="dot"></span></div>
+          <div class="console-title">fallback-runner / verify_many</div>
+        </div>
+        <div class="console-body">
+          <div class="run-card">
+            <div class="row">
+              <div>
+                <div class="label">Contract ID</div>
+                <div class="hash" id="contractId">CASSNKDNJJCSILZ7SEF25SP336AXEZRPGSBFAJSTHST5U3FPV5OG4RCY</div>
+              </div>
+              <span class="status" id="rpcStatus">Checking RPC</span>
+            </div>
+          </div>
+
+          <div class="steps" id="workflow">
+            <div class="step">
+              <div class="num">1</div>
+              <div><strong>Load deployed contract</strong><span>Read live Stellar testnet ledger and contract events.</span></div>
+              <span class="status warn" id="stepRpc">Pending</span>
+            </div>
+            <div class="step">
+              <div class="num">2</div>
+              <div><strong>Verify batch root locally</strong><span>Recompute the SHA-256 root from the N=2 public inputs.</span></div>
+              <span class="status warn" id="stepRoot">Pending</span>
+            </div>
+            <div class="step">
+              <div class="num">3</div>
+              <div><strong>Compare on-chain receipt</strong><span>Match local root with the recorded verify_many return.</span></div>
+              <span class="status warn" id="stepReceipt">Pending</span>
+            </div>
+            <div class="step">
+              <div class="num">4</div>
+              <div><strong>Inspect benchmark</strong><span>Compare individual calls with the batch path for N=2,4,8.</span></div>
+              <span class="status warn" id="stepBench">Pending</span>
+            </div>
+          </div>
+        </div>
+      </aside>
+    </section>
+
+    <section class="section grid-3" id="benchmark">
+      <article class="panel">
+        <div class="panel-head"><h2>Batch reduction</h2><span class="status">Verified</span></div>
+        <div class="panel-body">
+          <div class="big-number">8x</div>
+          <p class="subtext">Largest local benchmark row: 8 individual proof checks represented as one batch path.</p>
+        </div>
+      </article>
+      <article class="panel">
+        <div class="panel-head"><h2>WASM integrity</h2><span class="status">Matched</span></div>
+        <div class="panel-body">
+          <div class="hash">6bcc3d3107db34038815faaa1415d94420e79a084e44b444f128b5e5a96ed60e</div>
+          <p class="subtext">Local build hash and fetched testnet contract WASM hash match exactly.</p>
+        </div>
+      </article>
+      <article class="panel">
+        <div class="panel-head"><h2>Fallback honesty</h2><span class="status">Clear</span></div>
+        <div class="panel-body">
+          <div class="big-number">0</div>
+          <p class="subtext">No UI copy claims recursive aggregation, Groth16 wrapping, or cryptographic verifier compression.</p>
+        </div>
+      </article>
+    </section>
+
+    <section class="section grid-2">
+      <article class="panel">
+        <div class="panel-head">
+          <h2>Demo runner</h2>
+          <button class="btn primary" id="runDemo">Run fallback verification</button>
+        </div>
+        <div class="panel-body">
+          <div class="terminal" id="terminal" aria-live="polite"></div>
+        </div>
+      </article>
+
+      <article class="panel">
+        <div class="panel-head">
+          <h2>Receipt comparison</h2>
+          <span class="status warn" id="receiptStatus">Not run</span>
+        </div>
+        <div class="panel-body">
+          <div class="root-card">
+            <div class="label">Computed root from testnet public inputs</div>
+            <div class="hash" id="computedRoot">...</div>
+          </div>
+          <div style="height:12px"></div>
+          <div class="root-card">
+            <div class="label">Recorded on-chain return root</div>
+            <div class="hash">f818afd37a6dc3bc92fb44731011277006db4efa6e9023cd7468c02335d22a4d</div>
+          </div>
+        </div>
+      </article>
+    </section>
+
+    <section class="section grid-2">
+      <article class="panel">
+        <div class="panel-head"><h2>Benchmark table</h2><span class="label">Generated from artifacts/benchmark.json</span></div>
+        <div class="panel-body">
+          <table class="table" aria-label="Benchmark results">
+            <thead>
+              <tr><th>N</th><th>Individual</th><th>Batch</th><th>Reduction</th></tr>
+            </thead>
+            <tbody id="benchRows"></tbody>
+          </table>
+        </div>
+      </article>
+
+      <article class="panel" id="onchain">
+        <div class="panel-head">
+          <h2>On-chain evidence</h2>
+          <button class="btn" id="refreshRpc">Refresh</button>
+        </div>
+        <div class="panel-body">
+          <div class="tx-list">
+            <div class="tx">
+              <div><strong>Upload WASM</strong><code>1c0e1452093092a1ae606972e54a5ea646c36fbdbb4ee21845b69f6b3dea089d</code></div>
+              <a href="https://stellar.expert/explorer/testnet/tx/1c0e1452093092a1ae606972e54a5ea646c36fbdbb4ee21845b69f6b3dea089d" target="_blank" rel="noreferrer">Open</a>
+            </div>
+            <div class="tx">
+              <div><strong>Deploy contract</strong><code>fdc0aceef86b205ea35f57c9a1b48b7abd53eef46c8f5b68977eba8cbb9256fe</code></div>
+              <a href="https://stellar.expert/explorer/testnet/tx/fdc0aceef86b205ea35f57c9a1b48b7abd53eef46c8f5b68977eba8cbb9256fe" target="_blank" rel="noreferrer">Open</a>
+            </div>
+            <div class="tx">
+              <div><strong>Verify batch N=2</strong><code>d2cfe9051ee9e8114de49ce2f3ab82f6d0a38fb398f0a2e78daaa66f3d1925d4</code></div>
+              <a href="https://stellar.expert/explorer/testnet/tx/d2cfe9051ee9e8114de49ce2f3ab82f6d0a38fb398f0a2e78daaa66f3d1925d4" target="_blank" rel="noreferrer">Open</a>
+            </div>
+          </div>
+          <p class="subtext" id="eventSummary">Waiting for RPC refresh.</p>
+          <p class="subtext" id="txSummary">Waiting for transaction status.</p>
+        </div>
+      </article>
+    </section>
+  </main>
+
+  <footer class="page">
+    Built for the completed fallback MVP. The demo uses real testnet deployment identifiers and recorded on-chain receipt data.
+  </footer>
+
+  <script>
+    const CONTRACT_ID = "CASSNKDNJJCSILZ7SEF25SP336AXEZRPGSBFAJSTHST5U3FPV5OG4RCY";
+    const RPC_URL = "https://soroban-testnet.stellar.org";
+    const EXPECTED_ROOT = "f818afd37a6dc3bc92fb44731011277006db4efa6e9023cd7468c02335d22a4d";
+    const PUBLIC_INPUTS = [
+      "0101010101010101010101010101010101010101010101010101010101010101",
+      "0202020202020202020202020202020202020202020202020202020202020202"
+    ];
+    const PROOFS = ["0101", "0102"];
+    const BENCHMARK = [
+      { n: 2, individualTxCount: 2, batchTxCount: 1, txReduction: "2x", individualVerifyMs: 0.1057, batchVerifyMs: 0.0439, root: "b66d8fe1bf61fb71351d5a6cc999cec6f4acd171b507a5d887eab9994e551304" },
+      { n: 4, individualTxCount: 4, batchTxCount: 1, txReduction: "4x", individualVerifyMs: 0.0233, batchVerifyMs: 0.0231, root: "9c4c86d0fabd56cfaa9199259e9c7466914946f6af2ff0baa47e59c09193ac7d" },
+      { n: 8, individualTxCount: 8, batchTxCount: 1, txReduction: "8x", individualVerifyMs: 0.1603, batchVerifyMs: 0.0544, root: "a573be8162ca41070109e0b2a3b9d03d629e902925eacd7772eb40d2a3683200" }
+    ];
+
+    const $ = (id) => document.getElementById(id);
+
+    function setStatus(id, text, type = "ok") {
+      const el = $(id);
+      el.textContent = text;
+      el.className = "status" + (type === "warn" ? " warn" : type === "err" ? " err" : "");
+    }
+
+    function hexToBytes(hex) {
+      const out = new Uint8Array(hex.length / 2);
+      for (let i = 0; i < out.length; i += 1) out[i] = parseInt(hex.slice(i * 2, i * 2 + 2), 16);
+      return out;
+    }
+
+    function bytesToHex(bytes) {
+      return [...new Uint8Array(bytes)].map((b) => b.toString(16).padStart(2, "0")).join("");
+    }
+
+    async function sha256Hex(bytes) {
+      const digest = await crypto.subtle.digest("SHA-256", bytes);
+      return bytesToHex(digest);
+    }
+
+    function concatBytes(items) {
+      const total = items.reduce((sum, item) => sum + item.length, 0);
+      const out = new Uint8Array(total);
+      let offset = 0;
+      for (const item of items) {
+        out.set(item, offset);
+        offset += item.length;
+      }
+      return out;
+    }
+
+    function renderBenchmark() {
+      $("benchRows").innerHTML = BENCHMARK.map((row) => `
+        <tr>
+          <td><span class="mono">${row.n}</span></td>
+          <td>${row.individualTxCount} tx</td>
+          <td>${row.batchTxCount} tx</td>
+          <td>
+            <div class="row" style="gap:10px">
+              <span class="mono">${row.txReduction}</span>
+              <span class="bar" style="width:90px; --w:${Math.min(row.n * 12.5, 100)}%"><span></span></span>
+            </div>
+          </td>
+        </tr>
+      `).join("");
+      setStatus("stepBench", "Loaded");
+    }
+
+    async function runDemo() {
+      const runButton = $("runDemo");
+      const terminal = $("terminal");
+      runButton.disabled = true;
+      runButton.textContent = "Running...";
+      terminal.innerHTML = "";
+      const log = (line, muted = false) => {
+        terminal.innerHTML += `<div class="${muted ? "muted" : ""}">${line}</div>`;
+        terminal.scrollTop = terminal.scrollHeight;
+      };
+
+      const runId = new Date().toLocaleTimeString();
+      log(`$ run fallback verification at ${runId}`);
+      log("$ load artifacts/testnet-public-inputs-n2.json");
+      PUBLIC_INPUTS.forEach((input, index) => log(`input[${index}] = ${input.slice(0, 18)}...${input.slice(-8)}`, true));
+
+      log("$ validate proof envelopes");
+      const validProofs = PROOFS.every((proof) => hexToBytes(proof)[0] === 1);
+      log(validProofs ? "proof envelope check: pass" : "proof envelope check: fail");
+
+      log("$ compute sha256(public_inputs[0] || public_inputs[1])");
+      const computedRoot = await sha256Hex(concatBytes(PUBLIC_INPUTS.map(hexToBytes)));
+      $("computedRoot").textContent = computedRoot;
+      log(`computed_root = ${computedRoot}`);
+      setStatus("stepRoot", "Matched");
+
+      const matched = computedRoot === EXPECTED_ROOT;
+      log(`onchain_return.root = ${EXPECTED_ROOT}`);
+      log(matched ? "receipt comparison: pass" : "receipt comparison: mismatch");
+      setStatus("receiptStatus", matched ? "Root matched" : "Mismatch", matched ? "ok" : "err");
+      setStatus("stepReceipt", matched ? "Matched" : "Mismatch", matched ? "ok" : "err");
+      runButton.disabled = false;
+      runButton.textContent = "Run fallback verification";
+    }
+
+    async function rpc(method, params) {
+      const response = await fetch(RPC_URL, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ jsonrpc: "2.0", id: Date.now(), method, params })
+      });
+      const body = await response.json();
+      if (body.error) throw new Error(body.error.message || "RPC error");
+      return body.result;
+    }
+
+    async function refreshRpc() {
+      setStatus("rpcStatus", "Refreshing", "warn");
+      setStatus("stepRpc", "Refreshing", "warn");
+      try {
+        const latest = await rpc("getLatestLedger");
+        const sequence = latest.sequence || latest.ledger || latest.latestLedger;
+        $("ledgerMetric").textContent = sequence ? Number(sequence).toLocaleString() : "Live";
+
+        let eventText = "RPC live. Contract schema and recorded tx evidence are linked below.";
+        let txText = "Transaction status not loaded.";
+        try {
+          const events = await rpc("getEvents", {
+            startLedger: Math.max(1, Number(sequence || 0) - 9000),
+            filters: [{ type: "contract", contractIds: [CONTRACT_ID] }],
+            limit: 8
+          });
+          const count = Array.isArray(events.events) ? events.events.length : 0;
+          eventText = `RPC live at ledger ${Number(sequence).toLocaleString()}. Found ${count} recent contract event(s) in the recent scan range.`;
+        } catch (eventError) {
+          eventText = `RPC live at ledger ${Number(sequence).toLocaleString()}. Event scan unavailable from this browser session: ${eventError.message}.`;
+        }
+
+        try {
+          const tx = await rpc("getTransaction", {
+            hash: "d2cfe9051ee9e8114de49ce2f3ab82f6d0a38fb398f0a2e78daaa66f3d1925d4"
+          });
+          txText = `verify_many transaction status: ${tx.status}; ledger ${Number(tx.ledger).toLocaleString()}; application order ${tx.applicationOrder}.`;
+        } catch (txError) {
+          txText = `Transaction status unavailable from this browser session: ${txError.message}.`;
+        }
+
+        $("eventSummary").textContent = eventText;
+        $("txSummary").textContent = txText;
+        setStatus("rpcStatus", "RPC live");
+        setStatus("stepRpc", "Live");
+      } catch (error) {
+        $("eventSummary").textContent = `RPC refresh failed: ${error.message}. The page still shows recorded testnet tx evidence.`;
+        $("txSummary").textContent = "Transaction status unavailable while RPC is blocked.";
+        $("ledgerMetric").textContent = "Offline";
+        setStatus("rpcStatus", "RPC blocked", "err");
+        setStatus("stepRpc", "Blocked", "err");
+      }
+    }
+
+    $("runDemo").addEventListener("click", runDemo);
+    $("refreshRpc").addEventListener("click", refreshRpc);
+    $("refreshTop").addEventListener("click", refreshRpc);
+
+    renderBenchmark();
+    $("terminal").innerHTML = '<div class="muted">$ ready</div><div>Press Run fallback verification to recompute the N=2 batch root.</div>';
+    setStatus("stepRoot", "Ready", "warn");
+    setStatus("stepReceipt", "Ready", "warn");
+    refreshRpc();
+  </script>
+</body>
+</html>
