@@ -450,7 +450,7 @@
         <a href="#onchain">On-chain</a>
       </div>
       <div class="actions">
-        <a class="btn" href="https://stellar.expert/explorer/testnet/contract/CASSNKDNJJCSILZ7SEF25SP336AXEZRPGSBFAJSTHST5U3FPV5OG4RCY" target="_blank" rel="noreferrer">Explorer</a>
+        <a class="btn" href="https://stellar.expert/explorer/testnet/contract/CC6HXCAELE2M5W4ZLAIRVX2NQOOSUIJGBBFWYJRR5HT5FBGGGDYWPJJN" target="_blank" rel="noreferrer">Explorer</a>
         <button class="btn primary" id="refreshTop">Refresh testnet</button>
       </div>
     </nav>
@@ -468,19 +468,19 @@
               <span>Latest testnet ledger observed by Soroban RPC.</span>
             </div>
             <div class="metric">
-              <b>6bcc3d</b>
+              <b>fc0349</b>
               <span>Fetched testnet WASM hash matches local build.</span>
             </div>
             <div class="metric">
-              <b>N=2</b>
+              <b>N=1</b>
               <span>On-chain verify_many transaction recorded.</span>
             </div>
           </div>
         </div>
         <div class="pill-row">
-          <span class="pill">Network · Stellar testnet</span>
-          <span class="pill">Mode · Batch verification fallback</span>
-          <span class="pill">Claim · No recursive compression</span>
+          <span class="pill">Network / Stellar testnet</span>
+          <span class="pill">Mode / Batch verification fallback</span>
+          <span class="pill">Claim / No recursive compression</span>
         </div>
       </div>
 
@@ -494,7 +494,7 @@
             <div class="row">
               <div>
                 <div class="label">Contract ID</div>
-                <div class="hash" id="contractId">CASSNKDNJJCSILZ7SEF25SP336AXEZRPGSBFAJSTHST5U3FPV5OG4RCY</div>
+                <div class="hash" id="contractId">CC6HXCAELE2M5W4ZLAIRVX2NQOOSUIJGBBFWYJRR5HT5FBGGGDYWPJJN</div>
               </div>
               <span class="status" id="rpcStatus">Checking RPC</span>
             </div>
@@ -508,7 +508,7 @@
             </div>
             <div class="step">
               <div class="num">2</div>
-              <div><strong>Verify batch root locally</strong><span>Recompute the SHA-256 root from the N=2 public inputs.</span></div>
+              <div><strong>Verify batch root locally</strong><span>Recompute the SHA-256 root from the N=1 testnet public input.</span></div>
               <span class="status warn" id="stepRoot">Pending</span>
             </div>
             <div class="step">
@@ -537,7 +537,7 @@
       <article class="panel">
         <div class="panel-head"><h2>WASM integrity</h2><span class="status">Matched</span></div>
         <div class="panel-body">
-          <div class="hash">6bcc3d3107db34038815faaa1415d94420e79a084e44b444f128b5e5a96ed60e</div>
+          <div class="hash">fc034993c1c804c0f92b3910eed85f5fbb7b62da5f9ac20c26e941482f91367a</div>
           <p class="subtext">Local build hash and fetched testnet contract WASM hash match exactly.</p>
         </div>
       </article>
@@ -574,7 +574,7 @@
           <div style="height:12px"></div>
           <div class="root-card">
             <div class="label">Recorded on-chain return root</div>
-            <div class="hash">f818afd37a6dc3bc92fb44731011277006db4efa6e9023cd7468c02335d22a4d</div>
+            <div class="hash">75877bb41d393b5fb8455ce60ecd8dda001d06316496b14dfa7f895656eeca4a</div>
           </div>
         </div>
       </article>
@@ -601,16 +601,20 @@
         <div class="panel-body">
           <div class="tx-list">
             <div class="tx">
-              <div><strong>Upload WASM</strong><code>1c0e1452093092a1ae606972e54a5ea646c36fbdbb4ee21845b69f6b3dea089d</code></div>
-              <a href="https://stellar.expert/explorer/testnet/tx/1c0e1452093092a1ae606972e54a5ea646c36fbdbb4ee21845b69f6b3dea089d" target="_blank" rel="noreferrer">Open</a>
+              <div><strong>Upload WASM</strong><code>b8d631210d22064382ec179921a163cb1a47913aa716c1e1254c46bd8fb999c0</code></div>
+              <a href="https://stellar.expert/explorer/testnet/tx/b8d631210d22064382ec179921a163cb1a47913aa716c1e1254c46bd8fb999c0" target="_blank" rel="noreferrer">Open</a>
             </div>
             <div class="tx">
-              <div><strong>Deploy contract</strong><code>fdc0aceef86b205ea35f57c9a1b48b7abd53eef46c8f5b68977eba8cbb9256fe</code></div>
-              <a href="https://stellar.expert/explorer/testnet/tx/fdc0aceef86b205ea35f57c9a1b48b7abd53eef46c8f5b68977eba8cbb9256fe" target="_blank" rel="noreferrer">Open</a>
+              <div><strong>Deploy contract</strong><code>bcc31fba9673508da4122b882b1ad75fbebe5417be44ff0e2ea1381330f21e44</code></div>
+              <a href="https://stellar.expert/explorer/testnet/tx/bcc31fba9673508da4122b882b1ad75fbebe5417be44ff0e2ea1381330f21e44" target="_blank" rel="noreferrer">Open</a>
             </div>
             <div class="tx">
-              <div><strong>Verify batch N=2</strong><code>d2cfe9051ee9e8114de49ce2f3ab82f6d0a38fb398f0a2e78daaa66f3d1925d4</code></div>
-              <a href="https://stellar.expert/explorer/testnet/tx/d2cfe9051ee9e8114de49ce2f3ab82f6d0a38fb398f0a2e78daaa66f3d1925d4" target="_blank" rel="noreferrer">Open</a>
+              <div><strong>Register app</strong><code>b2e69b72b00ae2efb6d343c637534c2ba30777cb36f0f1fa7746b07989771c56</code></div>
+              <a href="https://stellar.expert/explorer/testnet/tx/b2e69b72b00ae2efb6d343c637534c2ba30777cb36f0f1fa7746b07989771c56" target="_blank" rel="noreferrer">Open</a>
+            </div>
+            <div class="tx">
+              <div><strong>Verify batch N=1</strong><code>0e6c062dec34d48e7ba8b64e1bbb05ce23bb172ed1934c0e4992cdeb7a628667</code></div>
+              <a href="https://stellar.expert/explorer/testnet/tx/0e6c062dec34d48e7ba8b64e1bbb05ce23bb172ed1934c0e4992cdeb7a628667" target="_blank" rel="noreferrer">Open</a>
             </div>
           </div>
           <p class="subtext" id="eventSummary">Waiting for RPC refresh.</p>
@@ -625,14 +629,13 @@
   </footer>
 
   <script>
-    const CONTRACT_ID = "CASSNKDNJJCSILZ7SEF25SP336AXEZRPGSBFAJSTHST5U3FPV5OG4RCY";
+    const CONTRACT_ID = "CC6HXCAELE2M5W4ZLAIRVX2NQOOSUIJGBBFWYJRR5HT5FBGGGDYWPJJN";
     const RPC_URL = "https://soroban-testnet.stellar.org";
-    const EXPECTED_ROOT = "f818afd37a6dc3bc92fb44731011277006db4efa6e9023cd7468c02335d22a4d";
+    const EXPECTED_ROOT = "75877bb41d393b5fb8455ce60ecd8dda001d06316496b14dfa7f895656eeca4a";
     const PUBLIC_INPUTS = [
-      "0101010101010101010101010101010101010101010101010101010101010101",
       "0202020202020202020202020202020202020202020202020202020202020202"
     ];
-    const PROOFS = ["0101", "0102"];
+    const PROOFS = ["0101"];
     const BENCHMARK = [
       { n: 2, individualTxCount: 2, batchTxCount: 1, txReduction: "2x", individualVerifyMs: 0.1057, batchVerifyMs: 0.0439, root: "b66d8fe1bf61fb71351d5a6cc999cec6f4acd171b507a5d887eab9994e551304" },
       { n: 4, individualTxCount: 4, batchTxCount: 1, txReduction: "4x", individualVerifyMs: 0.0233, batchVerifyMs: 0.0231, root: "9c4c86d0fabd56cfaa9199259e9c7466914946f6af2ff0baa47e59c09193ac7d" },
@@ -703,14 +706,14 @@
 
       const runId = new Date().toLocaleTimeString();
       log(`$ run fallback verification at ${runId}`);
-      log("$ load artifacts/testnet-public-inputs-n2.json");
+      log("$ load evidence/testnet-latest.json public input fixture");
       PUBLIC_INPUTS.forEach((input, index) => log(`input[${index}] = ${input.slice(0, 18)}...${input.slice(-8)}`, true));
 
       log("$ validate proof envelopes");
       const validProofs = PROOFS.every((proof) => hexToBytes(proof)[0] === 1);
       log(validProofs ? "proof envelope check: pass" : "proof envelope check: fail");
 
-      log("$ compute sha256(public_inputs[0] || public_inputs[1])");
+      log("$ compute sha256(public_inputs[0])");
       const computedRoot = await sha256Hex(concatBytes(PUBLIC_INPUTS.map(hexToBytes)));
       $("computedRoot").textContent = computedRoot;
       log(`computed_root = ${computedRoot}`);
@@ -760,7 +763,7 @@
 
         try {
           const tx = await rpc("getTransaction", {
-            hash: "d2cfe9051ee9e8114de49ce2f3ab82f6d0a38fb398f0a2e78daaa66f3d1925d4"
+            hash: "0e6c062dec34d48e7ba8b64e1bbb05ce23bb172ed1934c0e4992cdeb7a628667"
           });
           txText = `verify_many transaction status: ${tx.status}; ledger ${Number(tx.ledger).toLocaleString()}; application order ${tx.applicationOrder}.`;
         } catch (txError) {
@@ -785,7 +788,7 @@
     $("refreshTop").addEventListener("click", refreshRpc);
 
     renderBenchmark();
-    $("terminal").innerHTML = '<div class="muted">$ ready</div><div>Press Run fallback verification to recompute the N=2 batch root.</div>';
+    $("terminal").innerHTML = '<div class="muted">$ ready</div><div>Press Run fallback verification to recompute the N=1 testnet batch root.</div>';
     setStatus("stepRoot", "Ready", "warn");
     setStatus("stepReceipt", "Ready", "warn");
     refreshRpc();

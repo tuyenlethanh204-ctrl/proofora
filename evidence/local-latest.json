@@ -1,0 +1,12 @@
+{
+  "status": "success",
+  "contract_id": "CC6HXCAELE2M5W4ZLAIRVX2NQOOSUIJGBBFWYJRR5HT5FBGGGDYWPJJN",
+  "transaction_hash": "0e6c062dec34d48e7ba8b64e1bbb05ce23bb172ed1934c0e4992cdeb7a628667",
+  "proof_hash": "75877bb41d393b5fb8455ce60ecd8dda001d06316496b14dfa7f895656eeca4a",
+  "verification_key_hash": "b2f6d0a38fb398f0a2e78daaa66f3d1925d4d2cfe9051ee9e8114de49ce2f3a",
+  "final_state": {
+    "root": "75877bb41d393b5fb8455ce60ecd8dda001d06316496b14dfa7f895656eeca4a",
+    "n": 1,
+    "receipt_id": 1
+  }
+}

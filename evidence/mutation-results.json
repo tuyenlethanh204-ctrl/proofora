@@ -1,0 +1,37 @@
+[
+  {
+    "input": "app_id",
+    "result": "pass",
+    "mechanism": "cargo test (rejects_unregistered_app_id)"
+  },
+  {
+    "input": "batch_root",
+    "result": "pass",
+    "mechanism": "cargo test (rejects_mutated_batch_root)"
+  },
+  {
+    "input": "retention_proof",
+    "result": "pass",
+    "mechanism": "cargo test (rejects_zero_retention_proof)"
+  },
+  {
+    "input": "commitment_root",
+    "result": "limitation",
+    "note": "Not natively verified by fallback contract; verified at aggregation layer."
+  },
+  {
+    "input": "receipt_id",
+    "result": "limitation",
+    "note": "Generated as output by fallback contract, cannot be mutated as input."
+  },
+  {
+    "input": "ledger_sequence",
+    "result": "limitation",
+    "note": "Generated as output by fallback contract, cannot be mutated as input."
+  },
+  {
+    "input": "nullifier_hash",
+    "result": "pass",
+    "mechanism": "cargo test (DuplicateNullifier replay check)"
+  }
+]

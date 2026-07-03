@@ -1,0 +1,8 @@
+app_id = 1
+commitment_root = 9
+nullifier_hash = 11
+batch_root = 27
+receipt_id = 5
+ledger_sequence = 6
+retention_proof = 7
+private_witness = 8

@@ -1,0 +1,12 @@
+[package]
+name = "host"
+version = "0.1.0"
+edition = "2021"
+
+[dependencies]
+methods = { path = "../methods" }
+sub_circuit_methods = { path = "../../sub_circuit/methods" }
+sub_circuit_host = { path = "../../sub_circuit/host" }
+risc0-zkvm = { version = "^3.0.5" }
+tracing-subscriber = { version = "0.3", features = ["env-filter"] }
+serde = "1.0"

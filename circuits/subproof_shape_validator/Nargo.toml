@@ -1,0 +1,7 @@
+[package]
+name = "subproof_shape_validator"
+type = "bin"
+authors = ["Proofora"]
+compiler_version = ">=0.33.0"
+
+[dependencies]

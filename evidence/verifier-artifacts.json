@@ -1,0 +1,39 @@
+{
+  "mode": "batch verification fallback with RootVault",
+  "appId": "app123",
+  "n": 2,
+  "items": [
+    {
+      "proof": "0167fd4b7e",
+      "publicInput": {
+        "appId": "app123",
+        "commitmentRoot": "commitment_0",
+        "nullifierHash": "nullifier_0",
+        "batchRoot": "mock_batch_root",
+        "receiptId": "receipt_001",
+        "ledgerSequence": "12345",
+        "retentionProof": "proof_123"
+      },
+      "leaf": "2908630ab0ec845558fb88a7ced39af749fe34153bf5a4c03f64d46d9c3ff4ef"
+    },
+    {
+      "proof": "016620e385",
+      "publicInput": {
+        "appId": "app123",
+        "commitmentRoot": "commitment_1",
+        "nullifierHash": "nullifier_1",
+        "batchRoot": "mock_batch_root",
+        "receiptId": "receipt_001",
+        "ledgerSequence": "12345",
+        "retentionProof": "proof_123"
+      },
+      "leaf": "382eab381930b5b146ff641a1ae3f2653d5b066f8d27f5aa010720e6c344eb99"
+    }
+  ],
+  "expectedRoot": "546f0e41d2990b43b417b1a776b8ad4824d2155db5b2b33ceda8b741d8388ad6",
+  "nullifierHashes": [
+    "6b1a5341c2030f3f2f6ec365c1f5d55e1c8d79f0f784b2576846bde9f39da5d8",
+    "e6d8eb4d13eb29863b0304c3722bfcf34c4cf6fba75404c1df980f5ca5cae26a"
+  ],
+  "retentionProof": "47756609eee598193c1c6a4c57c4320641e17b8be5f8286e6a037a452e889a5e"
+}

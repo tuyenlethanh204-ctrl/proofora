@@ -1,0 +1,51 @@
+{
+  "project": "Proofora RootVault",
+  "proof_statement": "A submitted app checkpoint has a deterministic root, valid item shape, non-duplicated nullifiers, and a retrievable receipt anchored to Stellar state.",
+  "private_witness": "application-specific witness data remains outside RootVault",
+  "public_inputs": [
+    {
+      "name": "app_id",
+      "type": "Field",
+      "description": "Identifier for the application."
+    },
+    {
+      "name": "commitment_root",
+      "type": "Field",
+      "description": "The deterministic root of the app checkpoint."
+    },
+    {
+      "name": "nullifier_hash",
+      "type": "Field",
+      "description": "Hash of the nullifier set to prevent double-spending."
+    },
+    {
+      "name": "batch_root",
+      "type": "Field",
+      "description": "The root of the batch receipt."
+    },
+    {
+      "name": "receipt_id",
+      "type": "Field",
+      "description": "Identifier of the receipt."
+    },
+    {
+      "name": "ledger_sequence",
+      "type": "Field",
+      "description": "Sequence number of the ledger for the retention proof."
+    },
+    {
+      "name": "retention_proof",
+      "type": "Field",
+      "description": "Proof of retention anchored to the state."
+    }
+  ],
+  "mutation_tests": [
+    "wrong app id",
+    "wrong commitment root",
+    "wrong nullifier hash",
+    "wrong batch root",
+    "wrong receipt id",
+    "wrong ledger sequence",
+    "wrong retention proof"
+  ]
+}
